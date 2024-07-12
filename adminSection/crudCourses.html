@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | List Course view</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+    <!-- link to script.js bundle file -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
+
+    <!-- dataTable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- font import -->
+    <script src="https://kit.fontawesome.com/76b6fa4300.js" crossorigin="anonymous"></script>
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/76b6fa4300.js" crossorigin="anonymous"></script>
+    <!-- css -->
+
+    <!-- script -->
+</head>
+<style>
+    body {
+        margin-top: 20px;
+        /* font-family: 'Roboto', sans-serif; */
+        box-sizing: border-box !important;
+
+    }
+
+    .row,
+    input {
+        margin: auto !important;
+    }
+
+    .col-6 {
+        padding: 0px !important;
+    }
+
+    #table-title,
+    #edit-form-title {
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px
+    }
+
+    table,
+    thead,
+    tbody,
+    tr {
+        border: black 1px solid;
+    }
+
+    td,
+    th {
+        border: rgb(139, 138, 138) 0.5px solid;
+    }
+
+    .action-col {
+        width: 75px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<body>
+    <div class="container-fluid">
+        <!-- table -->
+        <div id="table-title">DANH SÁCH CÁC KHÓA HỌC</div>
+        <div class="table-scroll-space m-4 p-4">
+            <button class="btn btn-success mb-2" id="new-course-button">Add New Course</button>
+            <table class="table table-striped" id="courses-table" width="100%">
+                <thead>
+                    <tr>
+                        <th scope="col">No#</th>
+                        <th scope="col">Course Code</th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">Original Price</th>
+                        <th scope="col">Discount Pricem</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Cover Image</th>
+                        <th scope="col">Teacher Name</th>
+                        <th scope="col">Teacher Photo</th>
+                        <th scope="col">Is Popular</th>
+                        <th scope="col">Is Trending</th>
+                        <th class="" scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <!-- modal when edit order -->
+    <div class="modal" tabindex="-1" id="modal-edit">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content ">
+                <div class="modal-body container">
+                    <div id="edit-form-title">COURSE DETAIL: <span id="inp-orderCode"></span></div>
+                    <div class="row" style="margin: auto;">
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Course Code <span
+                                        class="text-danger">(*)</span></label>
+                                <input class="col-6 " id="inp-courseCode" type="text">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Course Name <span
+                                        class="text-danger">(*)</span></label>
+                                <input class="col-6 " id="inp-courseName" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: auto;">
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Price <span
+                                        class="text-danger">(*)</span></label>
+                                <input class="col-6 " id="inp-price" type="text">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Discount Price <span
+                                        class="text-danger">(*)</span></label>
+                                <input class="col-6 " id="inp-discountPrice" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: auto;">
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Duration <span
+                                        class="text-danger">(*)</span></label>
+                                <input class="col-6 " id="inp-duration" type="text">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Level <span
+                                        class="text-danger">(*)</span></label>
+                                <select name="" class="col-6 " id="inp-level">
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: auto;">
+                        <div class="form-group col-12" style="padding: 0px;">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px; margin: auto">Cover Image Url <span
+                                        class="text-danger">(*)</span></label>
+                                <input class="w-100 col-9" id="inp-coverImg" type="text">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row" style="margin: auto; box-sizing: border-box;">
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Teacher Name <span
+                                        class="text-danger">(*)</span></label>
+                                <input class="w-100 col-6" id="inp-teacherName" type="text">
+                            </div>
+                        </div>
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Teacher Cover Url <span
+                                        class="text-danger">(*)</span></label>
+                                <input class="w-100 col-6" id="inp-teacherPhoto" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: auto;">
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Is Popular <span
+                                        class="text-danger">(*)</span></label>
+                                <select name="" class="col-6 " id="inp-popular">
+                                    <option value="true">true</option>
+                                    <option value="false">false</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 form-group">
+                            <div class="row" style="margin: auto;">
+                                <label for="" class="col" style="width: 30px;">Is Trending <span
+                                        class="text-danger">(*)</span></label>
+                                <select name="" class="col-6 " id="inp-trending">
+                                    <option value="true">true</option>
+                                    <option value="false">false</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row " style="margin: auto;">
+                        <div class="col-6"></div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <button class="btn btn-secondary px-4 mr-2" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-success px-4" id="btn-confirm-update">Update</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal when delete order -->
+    <div class="modal" tabindex="-1" id="modal-delete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete Course</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove this course?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-confirm-delete" class="btn btn-danger">Confirm Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal success -->
+    <!-- <div class="modal" tabindex="-1" id="modal-success-noti">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                
+                    <h5 class="modal-title">SUCCESSFUL</h5>
+
+                    <button type="button" id="btn-confirm-sucess" data-dismiss="modal"
+                        class="btn btn-success">Close</button>
+
+
+                </div>
+            </div>
+        </div> -->
+        <!-- modal when add new order -->
+        <div class="modal" tabindex="-1" id="modal-create">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content ">
+                    <div class="modal-body container">
+                        <div id="edit-form-title">NEW COURSE INFO <span id="inp-orderCode-new"></span></div>
+                        <div class="row" style="margin: auto;">
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Course Code <span
+                                            class="text-danger">(*)</span></label>
+                                    <input class="col-6 " id="inp-courseCode-new" type="text">
+                                </div>
+                            </div>
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Course Name <span
+                                            class="text-danger">(*)</span></label>
+                                    <input class="col-6 " id="inp-courseName-new" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Price <span
+                                            class="text-danger">(*)</span></label>
+                                    <input class="col-6 " id="inp-price-new" type="text">
+                                </div>
+                            </div>
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Discount Price <span
+                                            class="text-danger">(*)</span></label>
+                                    <input class="col-6 " id="inp-discountPrice-new" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Duration <span
+                                            class="text-danger">(*)</span></label>
+                                    <input class="col-6 " id="inp-duration-new" type="text">
+                                </div>
+                            </div>
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Level <span
+                                            class="text-danger">(*)</span></label>
+                                    <select name="" class="col-6 " id="inp-level-new">
+                                        <option value="Beginner">Beginner</option>
+                                        <option value="Intermediate">Intermediate</option>
+                                        <option value="Advanced">Advanced</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-12" style="padding: 0px;">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px; margin: auto">Cover Image Url <span
+                                            class="text-danger">(*)</span></label>
+                                    <input class="w-100 col-9" id="inp-coverImg-new" type="text">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto; box-sizing: border-box;">
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Teacher Name <span
+                                            class="text-danger">(*)</span></label>
+                                    <input class="w-100 col-6" id="inp-teacherName-new" type="text">
+                                </div>
+                            </div>
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Teacher Cover Url <span
+                                            class="text-danger">(*)</span></label>
+                                    <input class="w-100 col-6" id="inp-teacherPhoto-new" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Is Popular <span
+                                            class="text-danger">(*)</span></label>
+                                    <select name="" class="col-6 " id="inp-popular-new">
+                                        <option value="true">true</option>
+                                        <option value="false">false</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6 form-group">
+                                <div class="row" style="margin: auto;">
+                                    <label for="" class="col" style="width: 30px;">Is Trending <span
+                                            class="text-danger">(*)</span></label>
+                                    <select name="" class="col-6 " id="inp-trending-new">
+                                        <option value="true">true</option>
+                                        <option value="false">false</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row " style="margin: auto;">
+                            <div class="col-6"></div>
+                            <div class="col-6 d-flex justify-content-end">
+                                <button class="btn btn-secondary px-4 mr-2" data-dismiss="modal">Cancel</button>
+                                <button class="btn btn-success px-4" id="btn-confirm-create">Create New</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+<script>
+    $(document).ready(function () {
+        // REGION 1
+        var gCourseName = ["STT", "courseCode", "courseName", "price", "discountPrice", "duration", "level", "coverImage", "teacherName", "teacherPhoto", "isPopular", "isTrending", "action"];
+        var gSTT_COL = 0;
+        var gCOURSE_CODE_COL = 1;
+        var gCOURSE_NAME_COL = 2;
+        var gPRICE_COL = 3;
+        var gDISCOUNT_PRICE_COL = 4;
+        var gDURATION_COL = 5;
+        var gLEVEL_COL = 6;
+        var gCOVER_IMAGE_COL = 7;
+        var gTEACHER_NAME_COL = 8;
+        var gTEACHER_PHOTO_COL = 9;
+        var gIS_POPULAR_COL = 10;
+        var gIS_TRENDING_COL = 11;
+        var gACTION_COL = 12;
+
+        // stt column number start at
+        var gSTT_START = 0;
+        // gBaseAPILink
+        var gBASE_URL = "https://624abe0dfd7e30c51c110ac6.mockapi.io/api/v1/";
+
+        var gRowObject = null;
+        // REGION 2
+
+        callApiToGetAllListCourse();
+
+        // init table data
+        var gCoursesTable = $("#courses-table").DataTable({
+            columns: [
+                { data: gCourseName[gSTT_COL] }, // STT
+                { data: gCourseName[gCOURSE_CODE_COL] },
+                { data: gCourseName[gCOURSE_NAME_COL] },
+                { data: gCourseName[gPRICE_COL] },
+                { data: gCourseName[gDISCOUNT_PRICE_COL] },
+                { data: gCourseName[gDURATION_COL] },
+                { data: gCourseName[gLEVEL_COL] },
+                { data: gCourseName[gCOVER_IMAGE_COL] },
+                { data: gCourseName[gTEACHER_NAME_COL] },
+                { data: gCourseName[gTEACHER_PHOTO_COL] },
+                { data: gCourseName[gIS_POPULAR_COL] },
+                { data: gCourseName[gIS_TRENDING_COL] },
+            ],
+            columnDefs: [
+                {
+                    targets: gSTT_COL,
+                    render: function (data, type, row, meta) {
+                        // Render the serial number for the first column (column index 0)
+                        if (type === 'display') {
+                            return meta.row + 1;
+                        } else {
+                            return meta.row;
+                        }
+                    }
+                },
+
+                {
+                    targets: gACTION_COL,
+                    width: "100px",
+                    defaultContent: `<div class="action-col"> <i class="fas fa-edit my-2 edit-row icon" tooltip="display" title="edit" tooltip=""></i>
+                    <i class="fas fa-trash my-2 delete-row btn icon" tooltip="display" title="delete"></i></div>`
+                },
+
+                {
+                    targets: gCOVER_IMAGE_COL,
+                    render: function (data) {
+                        return `<img src="${data}" alt="" class="img-fluid">`
+                    }
+                },
+                {
+                    targets: gTEACHER_PHOTO_COL,
+                    render: function (data) {
+                        return `<img src="${data}" alt="" class="img-fluid">`
+                    }
+                }
+            ],
+
+
+            searching: false,
+            paging: true,
+
+        });
+
+        // add tooltip attribute for all icon
+        $('[tooltip="display"]').tooltip();
+        // add hover event for all icon
+        $(document).on("mouseover", ".action-col .icon", function () {
+            // alert(this);
+            $(this).css("color", "blue");
+        })
+        // add hover event for icon to change color then turn black when mouse leave
+        $(document).on("mouseleave", ".action-col .icon", function () {
+            // alert(this);
+            $(this).css("color", "black");
+        })
+        // add event for edit icon
+        $(document).on("click", ".edit-row", function () {
+            var htmlRow = $(this).closest("tr");
+            var data = gCoursesTable.row(htmlRow).data();
+            // gán data = paramRowObject to global variable
+            gRowObject = data;
+            // console.log("id: ", data.id);
+            $("#modal-edit").modal("show");
+            // fill old input value
+            fillDataToForm(data);
+        })
+        // add event for delete icon
+        $(document).on("click", ".delete-row", function () {
+            var htmlRow = $(this).closest("tr");
+            var data = gCoursesTable.row(htmlRow).data();
+            // gán data = paramRowObject to global variable
+            gRowObject = data;
+            $("#modal-delete").modal("show");
+            // console.log("id: ", data.id);
+        })
+
+        // add event for update confirm button
+        $(document).on("click", "#btn-confirm-update", function () {
+            var vUpdatedOrder = {
+                firstName: "",
+                lastName: "",
+                // Chú ý validate email
+                email: "",
+                address: "",
+                phone: "",
+                // Payment method là 1 trong 3 giá trị: CreditCard - Paypal - BankTransfer
+                methodPayment: "",
+                // Voucher id lấy giá trị id khi kiểm tra mã giảm giá (Xem cấu trúc phần (**))
+                voucherId: null
+            };
+            thuThapDuLieuUpdateForm(vUpdatedOrder);
+            // console.log(vUpdatedOrder);
+            var vDuLieuValid = validateDuLieuForm(vUpdatedOrder);
+            // console.log("valid:", vDuLieuValid);
+            if (vDuLieuValid) {
+                // call api update
+                callApiToUpdateOrder(vUpdatedOrder);
+            }
+
+        }
+        );
+
+        // add event for delete confirm button
+        $(document).on("click", "#btn-confirm-delete", function () {
+            // call api delete
+            callApiToDeleteOrder(gRowObject.id);
+
+        }
+        );
+
+        // add event for create new button
+        $(document).on("click", "#new-course-button", function () {
+            $("#modal-create").modal("show");
+        })
+        // add event for confirm add new button
+        $(document).on("click", "#btn-confirm-create", function () {
+            var vNewCourse = {
+                courseCode: "",
+                courseName: "",
+                price: "",
+                discountPrice: "",
+                duration: "",
+                level: "",
+                coverImage: "",
+                teacherName: "",
+                teacherPhoto: "",
+                isPopular: "",
+                isTrending: "",
+            };
+            thuThapDuLieuCreateForm(vNewCourse);
+            // console.log(vUpdatedOrder);
+            var vDuLieuValid = validateDuLieuForm(vNewCourse);
+            // console.log("valid:", vDuLieuValid);
+            if (vDuLieuValid) {
+                // call api update
+                callApiToCreateCourse(vNewCourse);
+            }
+
+        }
+        );
+
+        // REGION 3
+        function callApiToGetAllListCourse() {
+            var gSTT_START = 0;
+
+            $.ajax({
+                url: gBASE_URL + "/courses",
+                type: "GET",
+                success: function (paramListObject) {
+                    console.log(paramListObject);
+                    renderDataToTable(paramListObject);
+                },
+                error: function (paramError) {
+                    console.log(paramError);
+                }
+            })
+        }
+
+        function fillDataToForm(paramRowObject) {
+            $("#inp-courseCode").val(paramRowObject.courseCode);
+            $("#inp-courseName").val(paramRowObject.courseName);
+            $("#inp-price").val(paramRowObject.price);
+            $("#inp-discountPrice").val(paramRowObject.discountPrice);
+            $("#inp-duration").val(paramRowObject.duration);
+            $("#inp-level").val(paramRowObject.level);
+            $("#inp-teacherName").val(paramRowObject.teacherName);
+            $("#inp-teacherPhoto").val(paramRowObject.teacherPhoto);
+            $("#inp-coverImg").val(paramRowObject.coverImage);
+            $("#inp-popular").val(paramRowObject.isPopular.toString());
+            $("#inp-trending").val(paramRowObject.isTrending.toString());
+
+        }
+
+        function thuThapDuLieuUpdateForm(paramObjectCourse) {
+            paramObjectCourse.courseCode = $("#inp-courseCode").val();
+            paramObjectCourse.courseName = $("#inp-courseName").val();
+            paramObjectCourse.price = $("#inp-price").val();
+            paramObjectCourse.discountPrice = $("#inp-discountPrice").val();
+            paramObjectCourse.duration = $("#inp-duration").val();
+            paramObjectCourse.level = $("#inp-level").find(":selected").val();
+            paramObjectCourse.teacherName = $("#inp-teacherName").val();
+            paramObjectCourse.teacherPhoto = $("#inp-teacherPhoto").val();
+            paramObjectCourse.coverImage = $("#inp-coverImg").val();
+            paramObjectCourse.isPopular = $("#inp-popular").val();
+            paramObjectCourse.isTrending = $("#inp-trending").val();
+            // alert(paramObjectOrder);
+        }
+
+        function validateDuLieuForm(paramObjectCourse) {
+            if (paramObjectCourse.courseCode == "") {
+                alert("Please enter Course Code");
+                return false;
+            }
+            if (paramObjectCourse.courseName == "") {
+                alert("Please enter Course Name");
+                return false;
+            }
+            if (paramObjectCourse.price == "") {
+                alert("Please enter Price");
+                return false;
+            }
+            if (paramObjectCourse.discountPrice == "") {
+                alert("Please enter Discount Price");
+                return false;
+            }
+            if (paramObjectCourse.duration == "") {
+                alert("Please enter Duration");
+                return false;
+            }
+            if (paramObjectCourse.teacherName == "") {
+                alert("Please enter Teacher Name");
+                return false;
+            }
+            if (paramObjectCourse.teacherPhoto == "") {
+                alert("Please enter Url Teacher Photo");
+                return false;
+            }
+            if (paramObjectCourse.coverImage == "") {
+                alert("Please enter Url Cover Image");
+                return false;
+            }
+            return true;
+        }
+
+        function callApiToUpdateOrder(paramObjectCourse) {
+            $.ajax({
+                url: gBASE_URL + "/courses/" + gRowObject.id,
+                type: "PUT",
+                data: JSON.stringify(paramObjectCourse),
+                contentType: "application/json",
+                success: function (paramListObject) {
+                    // console.log(paramListObject);
+                    $("#modal-edit").modal("hide");
+                    // show modal delete success
+                    // $("#modal-success-noti").modal("show");
+                    callApiToGetAllListCourse();
+                },
+                error: function (paramError) {
+                    console.log(paramError);
+                }
+            })
+        }
+
+        function callApiToDeleteOrder(paramIdCourse) {
+            $.ajax({
+                url: gBASE_URL + "/courses/" + paramIdCourse,
+                type: "DELETE",
+                success: function (paramListObject) {
+                    // console.log(paramListObject);
+                    $("#modal-delete").modal("hide");
+
+                    callApiToGetAllListCourse();
+                },
+            })
+        }
+
+        function thuThapDuLieuCreateForm(paramObjectCourse) {
+            paramObjectCourse.courseCode = $("#inp-courseCode-new").val();
+            paramObjectCourse.courseName = $("#inp-courseName-new").val();
+            paramObjectCourse.price = $("#inp-price-new").val();
+            paramObjectCourse.discountPrice = $("#inp-discountPrice-new").val();
+            paramObjectCourse.duration = $("#inp-duration-new").val();
+            paramObjectCourse.level = $("#inp-level-new :selected").val();
+            paramObjectCourse.teacherName = $("#inp-teacherName-new").val();
+            paramObjectCourse.teacherPhoto = $("#inp-teacherPhoto-new").val();
+            paramObjectCourse.coverImage = $("#inp-coverImg-new").val();
+            paramObjectCourse.isPopular = $("#inp-popular-new :selected").val().trim();
+            paramObjectCourse.isTrending = $("#inp-trending-new :selected").val().trim();
+            // alert(paramObjectOrder);
+        }
+
+        function callApiToCreateCourse(paramObjectCourse) {
+            $.ajax({
+                url: gBASE_URL + "/courses",
+                type: "POST",
+                data: JSON.stringify(paramObjectCourse),
+                contentType: "application/json",
+                success: function (paramListObject) {
+                    console.log(paramListObject);
+                    $("#modal-create").modal("hide");
+                    callApiToGetAllListCourse();
+                },
+                error: function (paramError) {
+                    console.log(paramError);
+                }
+            })
+        }
+
+        // REGION 4
+        function renderDataToTable(paramListObject) {
+            var gSTT_START = 0;
+            // alert("renderDataToTable");
+            gCoursesTable.clear();
+            gCoursesTable.rows.add(paramListObject);
+            gCoursesTable.draw();
+        }
+
+    });
+</script>
+
+</html>
